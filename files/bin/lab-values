@@ -1,0 +1,36 @@
+#!/bin/sh
+# lab-values - print every random value generated for this sandbox.
+#   lab-values            secrets are masked
+#   lab-values --reveal   show secrets too (only do this in a lab!)
+
+reveal=0
+[ "${1:-}" = "--reveal" ] && reveal=1
+
+mask() {
+  if [ "$reveal" -eq 1 ]; then
+    printf '%s' "$1"
+  else
+    printf '%s' "$1" | sed 's/./*/g'
+    printf '  (%s chars, use --reveal)' "$(printf '%s' "$1" | wc -c | tr -d ' ')"
+  fi
+}
+
+row() { printf '  %-20s %-20s %s\n' "$1" "$2" "$3"; }
+
+echo ""
+echo "  Operation Randomize - values for this sandbox"
+echo "  ------------------------------------------------------------------------"
+row "RANDOMIZER" "ENV VAR" "VALUE"
+row "random_creature" "LAB_CREATURE" "${LAB_CREATURE:-}"
+row "  + lower()" "LAB_VAULT_HOST" "${LAB_VAULT_HOST:-}"
+row "random_number" "LAB_VAULT_PORT" "${LAB_VAULT_PORT:-}"
+row "random_number" "LAB_SHARD_COUNT" "${LAB_SHARD_COUNT:-}"
+row "random_password" "LAB_VAULT_PASSWORD" "$(mask "${LAB_VAULT_PASSWORD:-}")"
+row "random_password" "LAB_VAULT_PIN" "$(mask "${LAB_VAULT_PIN:-}")"
+row "random_uuid" "LAB_SESSION_ID" "${LAB_SESSION_ID:-}"
+row "  + substr()" "LAB_SESSION_SHORT" "${LAB_SESSION_SHORT:-}"
+row "random_id (.hex)" "LAB_TENANT_HEX" "${LAB_TENANT_HEX:-}"
+row "random_id (.dec)" "LAB_TENANT_DEC" "${LAB_TENANT_DEC:-}"
+row "random_id (.base64)" "LAB_TENANT_B64" "${LAB_TENANT_B64:-<empty>}"
+echo "  ------------------------------------------------------------------------"
+echo ""
