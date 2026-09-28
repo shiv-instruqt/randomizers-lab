@@ -31,7 +31,7 @@ Here the same number feeds a **number field** and a **string field**:
 resource "container" "vault" {
   command = [
     "redis-server",
-    "--port", tostring(resource.random_number.vault_port.value),   # string list
+    "--port", "${resource.random_number.vault_port.value}",   # string list
     # ...
   ]
 
@@ -41,7 +41,7 @@ resource "container" "vault" {
 }
 ```
 
-`command` and `environment` expect strings, so the value goes through `tostring()`. `port.local` expects a number, so the value is used as-is.
+`command` and `environment` expect strings, so the value is wrapped in string interpolation, `"${...}"`, which turns the number into text. (The random_number docs show `tostring()`, but Labs 2.0 doesn't have that function. Using it fails the lab at start-up with *Call to unknown function*.) `port.local` expects a number, so the value is used as-is.
 
 ## Hands-on
 

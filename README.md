@@ -22,7 +22,7 @@ An Instruqt **Labs 2.0** lab that covers all five randomizer resources, using a 
    cd randomizers-lab
    git init && git branch -m main
    git add . && git commit -m "Operation Randomize: Labs 2.0 randomizers lab"
-   git remote add origin git@github.com:<you>/randomizers-lab.git
+   git remote add origin https://github.com/shiv-instruqt/randomizers-lab.git
    git push -u origin main
    ```
 
@@ -83,8 +83,9 @@ These come from the docs, plus field reports in Slack `#2-point-0-internal-feedb
 6. **`override_special = "@#%+="`.** It keeps the password shell-safe, which matters because the vault's health check and `--requirepass` receive it.
 7. **Secrets never reach instructions or outputs.** The password and PIN go only to container `environment`. The capstone check fails if either appears in the manifest.
 8. **`lower()` on the creature name.** Hostnames stay predictable whatever casing the generator returns. (Upstream Jumppad capitalizes creature names, for example `Zesty-Kraken`, while the Instruqt docs show `brave-dolphin`.) Checks accept either form.
-9. **`depends_on` + `health_check`.** The workstation starts only after the vault answers `PONG` on its random port.
-10. **The literal `{{` trick.** Pages that need to *show* placeholder syntax get a variable `lb = "{{"` and write `{{lb}}creature}}`, so nothing is rendered by accident.
+9. **No `tostring()`.** It isn't available in Labs 2.0 (it fails at start-up with *Call to unknown function*), so numbers go into string fields with `"${...}"` interpolation.
+10. **`depends_on` + `health_check`.** The workstation starts only after the vault answers `PONG` on its random port.
+11. **The literal `{{` trick.** Pages that need to *show* placeholder syntax get a variable `lb = "{{"` and write `{{lb}}creature}}`, so nothing is rendered by accident.
 
 ## Testing checklist
 
@@ -101,6 +102,7 @@ These come from the docs, plus field reports in Slack `#2-point-0-internal-feedb
 
 | Symptom | Likely cause / fix |
 |---|---|
+| `Call to unknown function ... "tostring"` on start | Labs 2.0 has no `tostring()`, even though the random_number docs use it. Convert numbers with interpolation instead: `"${resource.random_number.x.value}"`. (Fixed in this repo.) |
 | `Unsupported attribute "base64"` on start | Your platform version doesn't expose `random_id.base64`. Remove the `LAB_TENANT_B64` line in `sandbox.hcl` and `tenantB64` in `pages.hcl`. The decode check falls back to hex. |
 | Workstation fails to start / `lab-values: not found` | The `files` volume didn't mount. Check the path `source = "files"` relative to `sandbox.hcl`. |
 | Vault never healthy | Check the vault container logs. The health check runs `redis-cli -p <port> -a '<password>' ping`. |

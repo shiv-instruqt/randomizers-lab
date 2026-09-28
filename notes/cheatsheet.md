@@ -25,7 +25,7 @@ resource "random_number" "name" {
 
 | Attribute | Type |
 |---|---|
-| `value` | **number**. Wrap it in `tostring()` for string fields |
+| `value` | **number**. Use `"${...}"` for string fields (no `tostring()`) |
 
 Use for ports, counts, weights and subnet octets.
 
@@ -85,7 +85,7 @@ Use for non-sensitive suffixes and namespaces. 8–16 bytes is typical.
 ```hcl
 # Into a container
 environment = {
-  PORT = tostring(resource.random_number.port.value)
+  PORT = "${resource.random_number.port.value}"
   NAME = lower(resource.random_creature.name.value)
 }
 

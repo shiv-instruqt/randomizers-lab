@@ -50,12 +50,12 @@ resource "numeric_answer_question" "number_min" {
 }
 
 resource "single_choice_question" "number_type" {
-  question = "random_number.value is a number. What is the safest way to put it into a container's environment map (map of strings)?"
-  answer   = "tostring(resource.random_number.vault_port.value)"
+  question = "random_number.value is a number. Which expression puts it into a container's environment map (map of strings)?"
+  answer   = "\"$${resource.random_number.vault_port.value}\" (string interpolation)"
 
   distractors = [
     "resource.random_number.vault_port.value.string",
-    "string(resource.random_number.vault_port)",
+    "tostring(resource.random_number.vault_port.value) - not available in Labs 2.0",
     "Numbers cannot be used in environment variables",
   ]
 

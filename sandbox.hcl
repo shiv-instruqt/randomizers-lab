@@ -88,7 +88,7 @@ resource "container" "vault" {
 
   command = [
     "redis-server",
-    "--port", tostring(resource.random_number.vault_port.value),
+    "--port", "${resource.random_number.vault_port.value}",
     "--requirepass", resource.random_password.vault.value,
     "--save", "",
     "--appendonly", "no",
@@ -141,9 +141,9 @@ resource "container" "workstation" {
     LAB_CREATURE   = resource.random_creature.mascot.value
     LAB_VAULT_HOST = lower(resource.random_creature.mascot.value)
 
-    # random_number
-    LAB_VAULT_PORT  = tostring(resource.random_number.vault_port.value)
-    LAB_SHARD_COUNT = tostring(resource.random_number.shard_count.value)
+    # random_number ("${...}" interpolation turns the number into a string)
+    LAB_VAULT_PORT  = "${resource.random_number.vault_port.value}"
+    LAB_SHARD_COUNT = "${resource.random_number.shard_count.value}"
 
     # random_password
     LAB_VAULT_PASSWORD = resource.random_password.vault.value

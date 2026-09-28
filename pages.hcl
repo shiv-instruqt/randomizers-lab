@@ -16,8 +16,8 @@ resource "page" "welcome" {
   variables = {
     creature     = resource.random_creature.mascot.value
     vaultHost    = lower(resource.random_creature.mascot.value)
-    vaultPort    = tostring(resource.random_number.vault_port.value)
-    shardCount   = tostring(resource.random_number.shard_count.value)
+    vaultPort    = "${resource.random_number.vault_port.value}"
+    shardCount   = "${resource.random_number.shard_count.value}"
     sessionId    = resource.random_uuid.session.value
     tenantHex    = resource.random_id.tenant.hex
     lb           = "{{"
@@ -45,8 +45,8 @@ resource "page" "number" {
 
   variables = {
     vaultHost  = lower(resource.random_creature.mascot.value)
-    vaultPort  = tostring(resource.random_number.vault_port.value)
-    shardCount = tostring(resource.random_number.shard_count.value)
+    vaultPort  = "${resource.random_number.vault_port.value}"
+    shardCount = "${resource.random_number.shard_count.value}"
   }
 
   activities = {
@@ -61,7 +61,7 @@ resource "page" "password" {
 
   variables = {
     vaultHost = lower(resource.random_creature.mascot.value)
-    vaultPort = tostring(resource.random_number.vault_port.value)
+    vaultPort = "${resource.random_number.vault_port.value}"
   }
 
   activities = {
@@ -108,8 +108,8 @@ resource "page" "capstone" {
   variables = {
     creature     = resource.random_creature.mascot.value
     vaultHost    = lower(resource.random_creature.mascot.value)
-    vaultPort    = tostring(resource.random_number.vault_port.value)
-    shardCount   = tostring(resource.random_number.shard_count.value)
+    vaultPort    = "${resource.random_number.vault_port.value}"
+    shardCount   = "${resource.random_number.shard_count.value}"
     sessionId    = resource.random_uuid.session.value
     sessionShort = substr(resource.random_uuid.session.value, 0, 8)
     tenantHex    = resource.random_id.tenant.hex

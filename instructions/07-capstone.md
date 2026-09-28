@@ -72,7 +72,7 @@ And the patterns that make them useful in real labs:
 
 - **Environment injection:** `environment = { X = resource.random_*.name.value }`
 - **Personalized instructions:** page `variables` and `{{lb}}creature}}`-style placeholders (camelCase names)
-- **Type conversion:** `tostring()` for numbers in string fields
+- **Type conversion:** `"${...}"` interpolation for numbers in string fields (`tostring()` isn't available)
 - **Derivation:** `lower()` and `substr()` to shape values
 - **Secret hygiene:** `min_*` for policies, `override_special` for safe symbols, `REDISCLI_AUTH` instead of `-a`, and never putting secrets in instructions or manifests
 - **Robust checks:** read expected values from the environment. Never hard-code a random value.
